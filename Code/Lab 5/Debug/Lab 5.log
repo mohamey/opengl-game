@@ -1,0 +1,37 @@
+﻿  maths_funcs.cpp
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(132): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(250): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(254): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(255): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(430): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(432): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(433): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(434): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(435): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(442): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(444): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(445): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(446): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(447): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(454): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(456): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(457): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(458): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(459): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(520): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(521): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(583): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(584): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(585): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(586): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(591): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(629): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(655): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(665): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(666): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\maths_funcs.cpp(667): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+d:\college\fourth_year\graphics\labs\lab 5\lab 5\main.cpp(268): warning C4305: 'argument': truncation from 'double' to 'float'
+  Generating Code...
+  Lab 5.vcxproj -> D:\College\fourth_year\Graphics\Labs\Lab 5\Debug\Lab 5.exe
+  Lab 5.vcxproj -> D:\College\fourth_year\Graphics\Labs\Lab 5\Debug\Lab 5.pdb (Partial PDB)

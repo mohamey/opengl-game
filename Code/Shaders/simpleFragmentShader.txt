@@ -1,0 +1,10 @@
+#version 330
+
+in vec4 fragment_colour;
+in vec2 Vertex_texture;
+
+uniform sampler2D ourTexture;
+
+void main(){
+	gl_FragColor = texture(ourTexture, Vertex_texture) * fragment_colour;
+}
