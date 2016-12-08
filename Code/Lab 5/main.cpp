@@ -229,7 +229,7 @@ class Banana {
 		float speed = 0.4f;
 		double distance_travelled = 0.0;
 		double max_distance = 40.0f;
-		float scaleFactor = 0.5f;
+		float scaleFactor = 0.75f;
 		vec3 scaleVector = vec3(0.25, 0.25, 0.25);
 		float health = 1.0;
 
@@ -253,12 +253,12 @@ class Banana {
 		}
 
 		void setRotation() {
-			double rotations[4] = { 0.0, 90.0, 180.0, 270.0 };
+			double rotations[4] = { 90.0, 180.0, 270.0, 0.0 };
 			rotation = rotations[index];
 		}
 
 		void setSpeed() {
-			int rando = rand() % 1500 + 500;
+			int rando = rand() % 500 + 500;
 			//printf("RANDO: %i\n", rando);
 			speed = (float)rando / 10000.0;
 			//printf("SPEED: %f\n", speed);
@@ -869,22 +869,6 @@ void keypress(unsigned char key, int x, int y) {
 			else {
 				position += vec3(0.0, 0.0, -2.5) * speed;
 			}
-			break;
-		case 'e':
-			rotations = abs((rotations + 1)) % 4;
-			bananaDirection -= 90.0;
-			horizontalAngle -= M_PI / 2;
-			newPosVector = vec3(xpos[rotations], 1.5, zpos[rotations]);
-			break;
-		// Move Left
-		case 'q':
-			rotations = rotations - 1;
-			if (rotations < 0) {
-				rotations = 3;
-			}
-			bananaDirection += 90.0;
-			horizontalAngle += M_PI / 2;
-			newPosVector = vec3(xpos[rotations], 1.5, zpos[rotations]);
 			break;
 		// Exit program
 		case 'x':
