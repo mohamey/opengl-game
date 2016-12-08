@@ -64,7 +64,7 @@ float mouseSpeed = 0.0007f;
 // Keep track of how far the mouse has deviated from the origin
 int totalX = 0, totalY = 0;
 
-vec3 direction = vec3(0.0, 1.0, 1.0), rightVec, up, position = vec3(0.0, 0.75, 0.0f);
+vec3 direction = vec3(0.0, 1.0, 1.0), rightVec, up, position = vec3(0.0, 1.0, 0.0f);
 vec3 newPosVector = vec3(0, 1.5, 1.5);
 bool z_axis;
 
@@ -83,7 +83,7 @@ int rotations = 0;
 // Define a class for the bullet
 class Bullet {
 	private:
-		vec3 position;
+		vec3 pos;
 		vec3 dir;
 		float movement_unit = 1.0;
 		vec3 x_movement = vec3(movement_unit, 0.0, 0.0);
@@ -92,7 +92,7 @@ class Bullet {
 		float distance_travelled = 0.0f;
 		float max_distance = 10.0f;
 		float scaleFactor;
-		double rotation = 0.0;
+		float rotation = 0.0;
 		vec3 scaleVector;
 		float damage = 1.0;
 		bool visible;
@@ -100,7 +100,7 @@ class Bullet {
 
 		void setStartPoint() {
 			//print(bananaPosition);
-			position = bananaPosition;
+			pos = position + (direction);
 		}
 
 		void setDirection() {
@@ -110,7 +110,21 @@ class Bullet {
 
 		void setRotation() {
 			print(dir);
-			if (dir.v[2] == -1.0) {
+			float x = dir.v[0], z = dir.v[2];
+			if ((x <= 0 && x >= -1) && (z <= 1 && z >= 0)) {
+				rotation = (90.0 * abs(x)) * -1.0;
+			}
+			else if ((x >= -1 && x <= 0) && (z <= 0 && z >= -1)) {
+				rotation = ((90.0 * abs(z)) + 90.0) * -1.0;
+			}
+			else if ((x <= 1 && x >= 0) && (z >= -1 && z <= 0)) {
+				rotation = ((90.0 * abs(x)) + 180.0) * -1.0;
+			}
+			else if ((x <= 1 && x >= 0) && (z >= 0 && z <= 1)) {
+				rotation = ((90.0 * abs(z)) + 270.0) * -1.0;
+			}
+			printf("Angle: %f\n", rotation);
+			/*if (dir.v[2] == -1.0) {
 				rotation = 90.0;
 			}
 			else if (dir.v[2] == 1.0) {
@@ -122,6 +136,7 @@ class Bullet {
 			else {
 				rotation = 0.0;
 			}
+			rotation = 0.0;*/
 		}
 
 		void setVisible() {
@@ -134,10 +149,10 @@ class Bullet {
 
 		void setScale() {
 			if (bazooka) {
-				scaleFactor = 3.0f;
+				scaleFactor = 1.0f;
 			}
 			else {
-				scaleFactor = 1.0f;
+				scaleFactor = 0.33f;
 			}
 			scaleVector = vec3(scaleFactor, scaleFactor, scaleFactor);
 		}
@@ -153,7 +168,7 @@ class Bullet {
 		}
 
 		vec3 getPosition() {
-			return position;
+			return pos;
 		}
 
 		float getScaleFactor() {
@@ -165,7 +180,7 @@ class Bullet {
 		}
 
 		void updatePosition() {
-			position += dir * speed;
+			pos += dir * speed;
 			distance_travelled += movement_unit * speed;
 		}
 
@@ -198,12 +213,12 @@ DWORD lastBazooka = timeGetTime();
 DWORD bazookaInterval = 3000;
 
 const int max_bullets = 10;
-Bullet bananas[max_bullets];
+Bullet bullets[max_bullets];
 
 int bulletCount = 0, bulletIndex = 0;
 
 // Define a class for the Monkey heads
-class Monkey {
+class Banana {
 	private:
 		int index;
 		vec3 position;
@@ -250,7 +265,7 @@ class Monkey {
 		}
 
 	public:
-		void initMonkey() {
+		void initBanana() {
 			generateIndex();
 			setStartPoint();
 			setRotation();
@@ -312,11 +327,11 @@ class Monkey {
 		}
 };
 
-const int max_monkeys = 30;
-Monkey monkey[max_monkeys];
-int monkeyCount = 0;
-DWORD last_monkey;
-DWORD monkey_interval = 5000;
+const int max_bananas = 30;
+Banana banana[max_bananas];
+int bananaCount = 0;
+DWORD lastBanana;
+DWORD bananaInterval = 5000;
 
 
 bool collision(vec3 objectPos1, double objScale1, vec3 objectPos2, double objScale2) {
@@ -545,7 +560,7 @@ void generateObjectBufferMesh(int index) {
 #pragma endregion VBO_FUNCTIONS
 // Function for updating camera angles and direction
 void getInputData() {
-	//horizontalAngle += mouseSpeed *  float(totalX) * -1.0;
+	horizontalAngle += mouseSpeed *  float(totalX) * -1.0;
 	//verticalAngle += mouseSpeed * float(totalY) * -1.0;
 	//horizontalAngle = M_PI;
 	//verticalAngle = -0.5;
@@ -592,8 +607,8 @@ void display(){
 	getInputData();
 	vec3 newPosition = position + newPosVector;
 	vec3 newDirection = direction + vec3(0.0, -0.5, 0.0);
-	view = look_at(newPosition, newPosition + newDirection, up);
-	//view = look_at(vec3(0.0, 0.0, 0.0), position + direction, up);
+	//view = look_at(newPosition, newPosition + newDirection, up);
+	view = look_at(position, position + direction, up);
 
 	// Bind buffer for city mesh
 	bindBuffers(0);
@@ -623,81 +638,81 @@ void display(){
 	glDrawArrays(GL_TRIANGLES, 0, g_point_count[1]);
 
 	// Banana man stuff
-	bindBuffers(2);
-	glBindTexture(GL_TEXTURE_2D, bananaTex);
+	//bindBuffers(2);
+	//glBindTexture(GL_TEXTURE_2D, bananaTex);
 
 	// Create the objects model, scale it and orient it properly at the origin
-	bananamanModel = identity_mat4();
-	bananamanModel = scale(bananamanModel, vec3(bananaScale, bananaScale, bananaScale));
+	//bananamanModel = identity_mat4();
+	//bananamanModel = scale(bananamanModel, vec3(bananaScale, bananaScale, bananaScale));
 	//bananamanModel = rotate_x_deg(bananamanModel, -90.0);
-	bananamanModel = rotate_y_deg(bananamanModel, bananaDirection);
+	//bananamanModel = rotate_y_deg(bananamanModel, bananaDirection);
 
 	// Translate it in front of the camera
-	bananaPosition= position + vec3(0.0, -0.5, 0.0);
-	bananamanModel = translate(bananamanModel, bananaPosition);
+	//bananaPosition= position + vec3(0.0, -0.5, 0.0);
+	//bananamanModel = translate(bananamanModel, bananaPosition);
 
 
-	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, bananamanModel.m);
-	glDrawArrays(GL_TRIANGLES, 0, g_point_count[2]);
+	//glUniformMatrix4fv(matrix_location, 1, GL_FALSE, bananamanModel.m);
+	//glDrawArrays(GL_TRIANGLES, 0, g_point_count[2]);
 
 	// Draw in the monkey
-	bindBuffers(3);
-	for (int i = 0; i < monkeyCount; i++) {
-		mat4 monkeyModel = identity_mat4();
-		monkeyModel = scale(monkeyModel, monkey[i].getScaleVector());
-		monkeyModel = rotate_y_deg(monkeyModel, monkey[i].getRotation());
-		monkeyModel = translate(monkeyModel, monkey[i].getPosition());
+	bindBuffers(2);
+	glBindTexture(GL_TEXTURE_2D, bananaTex);
+	for (int i = 0; i < bananaCount; i++) {
+		mat4 bananaModel = identity_mat4();
+		bananaModel = scale(bananaModel, banana[i].getScaleVector());
+		bananaModel = rotate_y_deg(bananaModel, banana[i].getRotation());
+		bananaModel = translate(bananaModel, banana[i].getPosition());
 
-		if (collision(bananaPosition, bananaScale, monkey[i].getPosition(), monkey[i].getScaleFactor())) {
-			monkey[i].initMonkey();
+		if (collision(position, 0.25, banana[i].getPosition(), banana[i].getScaleFactor())) {
+			banana[i].initBanana();
 		}
 
-		monkey[i].updatePosition();
+		banana[i].updatePosition();
 
-		if (!monkey[i].inBounds()) {
-			monkey[i].initMonkey();
+		if (!banana[i].inBounds()) {
+			banana[i].initBanana();
 		}
 
-		glUniformMatrix4fv(matrix_location, 1, GL_FALSE, monkeyModel.m);
-		glDrawArrays(GL_TRIANGLES, 0, g_point_count[3]);
+		glUniformMatrix4fv(matrix_location, 1, GL_FALSE, bananaModel.m);
+		glDrawArrays(GL_TRIANGLES, 0, g_point_count[2]);
 	}
 
 	DWORD curr_time = timeGetTime();
 
-	if ((curr_time - last_monkey) > monkey_interval && monkeyCount < max_monkeys) {
-		monkey[monkeyCount].initMonkey();
-		monkeyCount++;
-		last_monkey = timeGetTime();
+	if ((curr_time - lastBanana) > bananaInterval && bananaCount < max_bananas) {
+		banana[bananaCount].initBanana();
+		bananaCount++;
+		lastBanana = timeGetTime();
 		//printf("ADDED Monkey %d! \n", monkeyCount);
 	}
 
 	// Now draw the bullet objects
-	bindBuffers(4);
-	glBindTexture(GL_TEXTURE_2D, bulletTex);
+	bindBuffers(3);
 	for (int i = 0; i < min(bulletCount, max_bullets); i++) {
-		if (bananas[i].getVisibility()) {
+		if (bullets[i].getVisibility()) {
 			mat4 bulletModel = identity_mat4();
-			bulletModel = rotate_y_deg(bulletModel, bananas[i].getRotation());
-			bulletModel = scale(bulletModel, bananas[i].getScaleVector());
-			bulletModel = translate(bulletModel, bananas[i].getPosition());
-			bananas[i].updatePosition();
+			bulletModel = rotate_y_deg(bulletModel, bullets[i].getRotation());
+			bulletModel = scale(bulletModel, bullets[i].getScaleVector());
+			bulletModel = translate(bulletModel, bullets[i].getPosition());
+			bullets[i].updatePosition();
 
 			// Check if banana collided with a monkey
-			for (int j = 0; j < monkeyCount; j++) {
-				if (collision(bananas[i].getPosition(), bananas[i].getScaleFactor(), monkey[j].getPosition(), monkey[j].getScaleFactor())) {
-					monkey[j].updateHealth(bananas[i].getDamage());
-					if (!monkey[j].stillAlive()) {
-						monkey[j].initMonkey();
+			for (int j = 0; j < bananaCount; j++) {
+				if (collision(bullets[i].getPosition(), bullets[i].getScaleFactor(), banana[j].getPosition(), banana[j].getScaleFactor())) {
+					banana[j].updateHealth(bullets[i].getDamage());
+					if (!banana[j].stillAlive()) {
+						banana[j].initBanana();
 					}
-					bananas[i].setVisibility(false);
-					if (!bananas[i].isBazooka()) {
+					bullets[i].setVisibility(false);
+					if (!bullets[i].isBazooka()) {
 						break;
 					}
 				}
 			}
 
 			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, bulletModel.m);
-			glDrawArrays(GL_TRIANGLES, 0, g_point_count[4]);
+			glDrawArrays(GL_TRIANGLES, 0, g_point_count[3]);
 		}
 	}
 
@@ -735,11 +750,11 @@ void init()
 	generateObjectBufferMesh(3);
 	load_mesh(BULLET_MESH, &g_vp[4], &g_vn[4], &g_vt[4], &g_point_count[4], true);
 	generateObjectBufferMesh(4);
-	monkey[0].initMonkey();
-	monkey[1].initMonkey();
-	monkey[2].initMonkey();
-	monkeyCount = 3;
-	last_monkey = timeGetTime();
+	banana[0].initBanana();
+	banana[1].initBanana();
+	banana[2].initBanana();
+	bananaCount = 3;
+	lastBanana = timeGetTime();
 
 	// Get the plane texture
 	glGenTextures(1, &planeTex);
@@ -894,7 +909,7 @@ void updateMouse(int x, int y) {
 
 void handleMouse(int button, int state, int x, int y) {
 	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN)) {
-		bananas[bulletIndex].initBullet(false);
+		bullets[bulletIndex].initBullet(false);
 		bulletIndex = (bulletIndex + 1) % max_bullets;
 		bulletCount++;
 	}
@@ -902,7 +917,7 @@ void handleMouse(int button, int state, int x, int y) {
 		DWORD newTime = timeGetTime();
 		DWORD timeDiff = newTime - lastBazooka;
 		if (bazookaInterval < timeDiff) {
-			bananas[bulletIndex].initBullet(true);
+			bullets[bulletIndex].initBullet(true);
 			bulletIndex = (bulletIndex + 1) % max_bullets;
 			bulletCount++;
 			lastBazooka = newTime;
