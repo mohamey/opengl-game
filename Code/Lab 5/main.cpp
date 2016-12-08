@@ -8,6 +8,7 @@
 #include <SOIL.h>
 #include <iostream>
 #include "maths_funcs.h"
+#include "text.h"
 
 // Assimp includes
 
@@ -38,6 +39,10 @@ unsigned int vao[5];
 unsigned int vp_vbo[5];
 unsigned int vn_vbo[5];
 unsigned int vt_vbo[5];
+
+int text_id;
+int score = 0;
+bool leftButtonDown = false;
 
 // Macro for indexing vertex buffer
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -212,8 +217,11 @@ class Bullet {
 DWORD lastBazooka = timeGetTime();
 DWORD bazookaInterval = 3000;
 
-const int max_bullets = 10;
+const int max_bullets = 30;
 Bullet bullets[max_bullets];
+
+DWORD lastBullet = timeGetTime();
+DWORD minInterval = 100;
 
 int bulletCount = 0, bulletIndex = 0;
 
@@ -582,6 +590,16 @@ void getInputData() {
 	up = cross(rightVec, direction);
 }
 
+void shoot() {
+	DWORD curr_time = timeGetTime();
+	DWORD interval = curr_time - lastBullet;
+	if (minInterval < interval) {
+		bullets[bulletIndex].initBullet(false);
+		bulletIndex = (bulletIndex + 1) % max_bullets;
+		bulletCount++;
+		lastBullet = curr_time;
+	}
+}
 
 void display(){
 
@@ -671,6 +689,7 @@ void display(){
 		banana[i].updatePosition();
 
 		if (!banana[i].inBounds()) {
+			score++;
 			banana[i].initBanana();
 		}
 
@@ -685,6 +704,10 @@ void display(){
 		bananaCount++;
 		lastBanana = timeGetTime();
 		//printf("ADDED Monkey %d! \n", monkeyCount);
+	}
+
+	if (leftButtonDown) {
+		shoot();
 	}
 
 	// Now draw the bullet objects
@@ -703,6 +726,7 @@ void display(){
 					banana[j].updateHealth(bullets[i].getDamage());
 					if (!banana[j].stillAlive()) {
 						banana[j].initBanana();
+						score++;
 					}
 					bullets[i].setVisibility(false);
 					if (!bullets[i].isBazooka()) {
@@ -716,8 +740,16 @@ void display(){
 		}
 	}
 
+
+	char tmp[256];
+	sprintf(tmp, "Score: %i\n", score);
+	update_text(text_id, tmp);
+
+	draw_texts();
+
     glutSwapBuffers();
 }
+
 
 
 void updateScene() {	
@@ -823,6 +855,13 @@ void init()
 
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	init_text_rendering("../Lab 5/freemono.png", "../Lab 5/freemono.meta", width, height);
+	// x and y are -1 to 1
+	// size_px is the maximum glyph size in pixels (try 100.0f)
+	// r,g,b,a are red,blue,green,opacity values between 0.0 and 1.0
+	// if you want to change the text later you will use the returned integer as a parameter
+	text_id = add_text("Score: 0", -0.9 , -0.75, 60.0f, 1.0, 0.0, 0.0, 1.0);
 }
 
 // Placeholder code for the keypress
@@ -892,10 +931,8 @@ void updateMouse(int x, int y) {
 }
 
 void handleMouse(int button, int state, int x, int y) {
-	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN)) {
-		bullets[bulletIndex].initBullet(false);
-		bulletIndex = (bulletIndex + 1) % max_bullets;
-		bulletCount++;
+	if ((button == GLUT_LEFT_BUTTON)) {
+		leftButtonDown = (state == GLUT_DOWN);
 	}
 	else if ((button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN)) {
 		DWORD newTime = timeGetTime();
@@ -921,6 +958,7 @@ int main(int argc, char** argv){
 	glutIdleFunc(updateScene);
 	glutKeyboardFunc(keypress);
 	glutMouseFunc(handleMouse);
+	glutMotionFunc(updateMouse);
 	glutPassiveMotionFunc(updateMouse);
 	glutSetCursor(GLUT_CURSOR_NONE);
 	// Set mouse in the beginning of the screen

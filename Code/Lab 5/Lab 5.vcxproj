@@ -104,6 +104,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)Lab 5\soil\;$(SolutionDir)Lab 5\assimp\lib\Release;$(SolutionDir)Lab 5\glew-1.10.0\lib\Release\Win32;$(SolutionDir)Lab 5\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);glew32.lib;freeglut.lib;assimp.lib;soil.lib</AdditionalDependencies>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -122,10 +123,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="maths_funcs.cpp" />
+    <ClCompile Include="text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="maths_funcs.h" />
     <ClInclude Include="soil\include\SOIL.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="text.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Shaders\simpleFragmentShader.txt" />

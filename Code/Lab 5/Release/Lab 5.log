@@ -1,25 +1,47 @@
 ﻿  main.cpp
-main.cpp(58): warning C4305: 'initializing': truncation from 'double' to 'float'
-main.cpp(115): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-main.cpp(118): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-main.cpp(121): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-main.cpp(124): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-main.cpp(244): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-main.cpp(249): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-main.cpp(263): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-main.cpp(343): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-main.cpp(344): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-main.cpp(563): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-main.cpp(580): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-main.cpp(602): warning C4305: 'argument': truncation from 'double' to 'float'
-main.cpp(664): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-main.cpp(695): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-main.cpp(876): warning C4305: '-=': truncation from 'double' to 'float'
-main.cpp(886): warning C4305: '+=': truncation from 'double' to 'float'
+u:\my documents\visual studio 2015\projects\opengl-game\code\lab 5\text.h(22): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+  u:\my documents\visual studio 2015\projects\opengl-game\code\lab 5\text.h(22): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+main.cpp(63): warning C4305: 'initializing': truncation from 'double' to 'float'
+main.cpp(120): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(123): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(126): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(129): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(252): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(257): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(271): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(351): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(352): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(571): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+main.cpp(588): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(620): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(682): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(718): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(864): warning C4305: 'argument': truncation from 'double' to 'float'
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_buffer already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_malloc already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_buffer already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_malloc already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_malloc_guesssize already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_ldr_to_hdr_scale already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_ldr_to_hdr_gamma already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_hdr_to_ldr_scale already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_hdr_to_ldr_gamma already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_is_hdr_from_file already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_is_hdr already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_is_hdr_from_memory already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_loadf_from_memory already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_loadf_from_file already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_loadf already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_load_from_memory already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_load_from_file already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_load already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_image_free already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_failure_reason already defined in text.obj; second definition ignored
+U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\Lab 5.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
   Generating code
-  5 of 272 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
+  21 of 303 functions ( 6.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 soil.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(SOIL.obj)' or at 'U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\SOIL.pdb'; linking object as if no debug info
 soil.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_helper.obj)' or at 'U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\SOIL.pdb'; linking object as if no debug info
