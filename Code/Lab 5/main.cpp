@@ -91,11 +91,12 @@ class Bullet {
 		float speed = 0.4f;
 		float distance_travelled = 0.0f;
 		float max_distance = 10.0f;
-		float scaleFactor = 1.0f;
+		float scaleFactor;
 		double rotation = 0.0;
-		vec3 scaleVector = vec3(scaleFactor, scaleFactor, scaleFactor);
+		vec3 scaleVector;
 		float damage = 1.0;
 		bool visible;
+		bool bazooka;
 
 		void setStartPoint() {
 			//print(bananaPosition);
@@ -127,12 +128,28 @@ class Bullet {
 			visible = true;
 		}
 
+		void setBazooka(bool val) {
+			bazooka = val;
+		}
+
+		void setScale() {
+			if (bazooka) {
+				scaleFactor = 3.0f;
+			}
+			else {
+				scaleFactor = 1.0f;
+			}
+			scaleVector = vec3(scaleFactor, scaleFactor, scaleFactor);
+		}
+
 	public:
-		void initBullet() {
+		void initBullet(bool val) {
 			setStartPoint();
 			setVisible();
 			setDirection();
 			setRotation();
+			setBazooka(val);
+			setScale();
 		}
 
 		vec3 getPosition() {
@@ -171,7 +188,14 @@ class Bullet {
 		bool getVisibility() {
 			return visible;
 		}
+
+		bool isBazooka() {
+			return bazooka;
+		}
 };
+
+DWORD lastBazooka = timeGetTime();
+DWORD bazookaInterval = 3000;
 
 const int max_bullets = 10;
 Bullet bananas[max_bullets];
@@ -219,7 +243,7 @@ class Monkey {
 		}
 
 		void setSpeed() {
-			int rando = rand() % 2000 + 500;
+			int rando = rand() % 1500 + 500;
 			//printf("RANDO: %i\n", rando);
 			speed = (float)rando / 10000.0;
 			//printf("SPEED: %f\n", speed);
@@ -654,6 +678,7 @@ void display(){
 		if (bananas[i].getVisibility()) {
 			mat4 bulletModel = identity_mat4();
 			bulletModel = rotate_y_deg(bulletModel, bananas[i].getRotation());
+			bulletModel = scale(bulletModel, bananas[i].getScaleVector());
 			bulletModel = translate(bulletModel, bananas[i].getPosition());
 			bananas[i].updatePosition();
 
@@ -665,7 +690,9 @@ void display(){
 						monkey[j].initMonkey();
 					}
 					bananas[i].setVisibility(false);
-					break;
+					if (!bananas[i].isBazooka()) {
+						break;
+					}
 				}
 			}
 
@@ -867,9 +894,19 @@ void updateMouse(int x, int y) {
 
 void handleMouse(int button, int state, int x, int y) {
 	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN)) {
-		bananas[bulletIndex].initBullet();
+		bananas[bulletIndex].initBullet(false);
 		bulletIndex = (bulletIndex + 1) % max_bullets;
 		bulletCount++;
+	}
+	else if ((button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN)) {
+		DWORD newTime = timeGetTime();
+		DWORD timeDiff = newTime - lastBazooka;
+		if (bazookaInterval < timeDiff) {
+			bananas[bulletIndex].initBullet(true);
+			bulletIndex = (bulletIndex + 1) % max_bullets;
+			bulletCount++;
+			lastBazooka = newTime;
+		}
 	}
 }
 
