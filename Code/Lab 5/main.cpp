@@ -41,8 +41,14 @@ unsigned int vn_vbo[5];
 unsigned int vt_vbo[5];
 
 int text_id;
+int health_id;
+int gameOver_id;
 int score = 0;
+int health = 100;
+int bananaDamage = 15;
 bool leftButtonDown = false;
+bool playerDead = false;
+int finalScore = -1;
 
 // Macro for indexing vertex buffer
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -684,6 +690,10 @@ void display(){
 
 		if (collision(position, 0.25, banana[i].getPosition(), banana[i].getScaleFactor())) {
 			banana[i].initBanana();
+			health -= bananaDamage;
+			if (health <= 0) {
+				playerDead = true;
+			}
 		}
 
 		banana[i].updatePosition();
@@ -706,7 +716,7 @@ void display(){
 		//printf("ADDED Monkey %d! \n", monkeyCount);
 	}
 
-	if (leftButtonDown) {
+	if (leftButtonDown && !playerDead) {
 		shoot();
 	}
 
@@ -740,10 +750,23 @@ void display(){
 		}
 	}
 
+	if (playerDead && finalScore == -1) {
+		char tmp[256];
+		finalScore = score;
+		sprintf(tmp, "GAME OVER\nSCORE: %i\n", finalScore);
+		update_text(gameOver_id, tmp);
 
-	char tmp[256];
-	sprintf(tmp, "Score: %i\n", score);
-	update_text(text_id, tmp);
+		update_text(health_id, "Health: 0\n");
+	}
+	else if (!playerDead) {
+		char tmp[256];
+		sprintf(tmp, "Score: %i\n", score);
+		update_text(text_id, tmp);
+
+		char tmp2[256];
+		sprintf(tmp2, "Health: %i\n", health);
+		update_text(health_id, tmp2);
+	}
 
 	draw_texts();
 
@@ -861,7 +884,9 @@ void init()
 	// size_px is the maximum glyph size in pixels (try 100.0f)
 	// r,g,b,a are red,blue,green,opacity values between 0.0 and 1.0
 	// if you want to change the text later you will use the returned integer as a parameter
-	text_id = add_text("Score: 0", -0.9 , -0.75, 60.0f, 1.0, 0.0, 0.0, 1.0);
+	text_id = add_text("Score: 0", -0.9 , -0.75, 60.0f, 0.0, 0.0, 1.0, 1.0);
+	health_id = add_text("Health: 100", 0.6, -0.75, 60.0f, 0.0, 1.0, 0.0, 1.0);
+	gameOver_id = add_text("", -0.25, 0.25, 100.0f, 1.0, 0.0, 0.0, 1.0);
 }
 
 // Placeholder code for the keypress
@@ -871,48 +896,22 @@ void keypress(unsigned char key, int x, int y) {
 	float xpos[4] = { 0.0, -1.5, 0, 1.5 };
 	float zpos[4] = { 1.5, 0.0, -1.5, 0.0 };
 	//printf("KEY %c\n", key);
-	switch (key) {
-		// Move forward
+	if (!playerDead) {
+		switch (key) {
+			// Move forward
 		case 'w':
 			position += direction * speed;
 			break;
-		// Move backwards
+			// Move backwards
 		case 's':
 			position -= direction * speed;
 			break;
-		// Move Right
-		case 'a':
-			if (rotations == 0) {
-				position += vec3(-2.5, 0.0, 0.0) * speed;
-			}
-			else if (rotations == 1){
-				position += vec3(0.0, 0.0, -2.5) * speed;
-			}
-			else if (rotations == 2) {
-				position += vec3(2.5, 0.0, 0.0) * speed;
-			}
-			else {
-				position += vec3(0.0, 0.0, 2.5) * speed;
-			}
-			break;
-		case 'd':
-			if (rotations == 0) {
-				position += vec3(2.5, 0.0, 0.0) * speed;
-			}
-			else if (rotations == 1) {
-				position += vec3(0.0, 0.0, 2.5) * speed;
-			}
-			else if (rotations == 2) {
-				position += vec3(-2.5, 0.0, 0.0) * speed;
-			}
-			else {
-				position += vec3(0.0, 0.0, -2.5) * speed;
-			}
-			break;
-		// Exit program
 		case 'x':
 			exit(0);
-			break;
+		}
+	}
+	else if (key == 'x') {
+		exit(0);
 	}
 
 }
@@ -934,7 +933,7 @@ void handleMouse(int button, int state, int x, int y) {
 	if ((button == GLUT_LEFT_BUTTON)) {
 		leftButtonDown = (state == GLUT_DOWN);
 	}
-	else if ((button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN)) {
+	else if ((button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN) && !playerDead) {
 		DWORD newTime = timeGetTime();
 		DWORD timeDiff = newTime - lastBazooka;
 		if (bazookaInterval < timeDiff) {
