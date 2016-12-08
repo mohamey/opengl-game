@@ -84,6 +84,7 @@ int rotations = 0;
 class Bullet {
 	private:
 		vec3 position;
+		vec3 dir;
 		float movement_unit = 1.0;
 		vec3 x_movement = vec3(movement_unit, 0.0, 0.0);
 		vec3 z_movement = vec3(0.0, 0.0, movement_unit);
@@ -91,16 +92,47 @@ class Bullet {
 		float distance_travelled = 0.0f;
 		float max_distance = 10.0f;
 		float scaleFactor = 1.0f;
+		double rotation = 0.0;
 		vec3 scaleVector = vec3(scaleFactor, scaleFactor, scaleFactor);
+		float damage = 1.0;
+		bool visible;
 
 		void setStartPoint() {
-			print(bananaPosition);
+			//print(bananaPosition);
 			position = bananaPosition;
+		}
+
+		void setDirection() {
+			dir = vec3(direction.v[0], direction.v[1], direction.v[2]);
+			//print(dir);
+		}
+
+		void setRotation() {
+			print(dir);
+			if (dir.v[2] == -1.0) {
+				rotation = 90.0;
+			}
+			else if (dir.v[2] == 1.0) {
+				rotation = -90.0;
+			}
+			else if (dir.v[0] == -1.0) {
+				rotation = 180.0;
+			}
+			else {
+				rotation = 0.0;
+			}
+		}
+
+		void setVisible() {
+			visible = true;
 		}
 
 	public:
 		void initBullet() {
 			setStartPoint();
+			setVisible();
+			setDirection();
+			setRotation();
 		}
 
 		vec3 getPosition() {
@@ -116,8 +148,6 @@ class Bullet {
 		}
 
 		void updatePosition() {
-			vec3 dir = direction;
-			print(dir);
 			position += dir * speed;
 			distance_travelled += movement_unit * speed;
 		}
@@ -125,10 +155,28 @@ class Bullet {
 		bool inBounds() {
 			return distance_travelled < max_distance;
 		}
+
+		double getRotation() {
+			return rotation;
+		}
+
+		float getDamage() {
+			return damage;
+		}
+
+		void setVisibility(bool val) {
+			visible = val;
+		}
+
+		bool getVisibility() {
+			return visible;
+		}
 };
 
-Bullet bananas[10];
-int bulletCount = 0;
+const int max_bullets = 10;
+Bullet bananas[max_bullets];
+
+int bulletCount = 0, bulletIndex = 0;
 
 // Define a class for the Monkey heads
 class Monkey {
@@ -144,6 +192,7 @@ class Monkey {
 		double max_distance = 40.0f;
 		float scaleFactor = 0.5f;
 		vec3 scaleVector = vec3(0.25, 0.25, 0.25);
+		float health = 1.0;
 
 		void generateIndex() {
 			index = rand() % 4;
@@ -225,6 +274,18 @@ class Monkey {
 		vec3 getScaleVector() {
 			return scaleVector;
 		}
+
+		float getHealth() {
+			return health;
+		}
+
+		void updateHealth(float damage) {
+			health -= damage;
+		}
+
+		bool stillAlive() {
+			return health > 0.0;
+		}
 };
 
 const int max_monkeys = 30;
@@ -234,26 +295,21 @@ DWORD last_monkey;
 DWORD monkey_interval = 5000;
 
 
-bool collision(vec3 objectPos, double objScale) {
-	float x1 = objectPos.v[0];
-	float x2 = bananaPosition.v[0];
-	float z1 = objectPos.v[2];
-	float z2 = bananaPosition.v[2];
-	float bananaScale = 0.25;
+bool collision(vec3 objectPos1, double objScale1, vec3 objectPos2, double objScale2) {
+	float x1 = objectPos1.v[0];
+	float x2 = objectPos2.v[0];
+	float z1 = objectPos1.v[2];
+	float z2 = objectPos2.v[2];
 
-	float objEdge = objScale / 2;
-	float bananaEdge = bananaScale / 2;
+	float objEdge1 = objScale1 / 2;
+	float objEdge2 = objScale2 / 2;
 
-	float minDistance = objEdge + bananaEdge;
+	float minDistance = objEdge1 + objEdge2;
 
 	float absX = abs(x2 - x1);
 	float absZ = abs(z2 - z1);
 
 	if (absX < minDistance && absZ < minDistance) {
-		//printf("BANANA: ");
-		//print(bananaPosition);
-		//printf("\n Monkey: ");
-		//print(objectPos);
 		return true;
 	}
 	return false;
@@ -568,7 +624,7 @@ void display(){
 		monkeyModel = rotate_y_deg(monkeyModel, monkey[i].getRotation());
 		monkeyModel = translate(monkeyModel, monkey[i].getPosition());
 
-		if (collision(monkey[i].getPosition(), monkey[i].getScaleFactor())) {
+		if (collision(bananaPosition, bananaScale, monkey[i].getPosition(), monkey[i].getScaleFactor())) {
 			monkey[i].initMonkey();
 		}
 
@@ -588,18 +644,34 @@ void display(){
 		monkey[monkeyCount].initMonkey();
 		monkeyCount++;
 		last_monkey = timeGetTime();
-		printf("ADDED Monkey %d! \n", monkeyCount);
+		//printf("ADDED Monkey %d! \n", monkeyCount);
 	}
 
 	// Now draw the bullet objects
 	bindBuffers(4);
 	glBindTexture(GL_TEXTURE_2D, bulletTex);
-	for (int i = 0; i < bulletCount; i++) {
-		mat4 bulletModel = identity_mat4();
-		bulletModel = translate(bulletModel, bananas[i].getPosition());
-		bananas[i].updatePosition();
-		glUniformMatrix4fv(matrix_location, 1, GL_FALSE, bulletModel.m);
-		glDrawArrays(GL_TRIANGLES, 0, g_point_count[4]);
+	for (int i = 0; i < min(bulletCount, max_bullets); i++) {
+		if (bananas[i].getVisibility()) {
+			mat4 bulletModel = identity_mat4();
+			bulletModel = rotate_y_deg(bulletModel, bananas[i].getRotation());
+			bulletModel = translate(bulletModel, bananas[i].getPosition());
+			bananas[i].updatePosition();
+
+			// Check if banana collided with a monkey
+			for (int j = 0; j < monkeyCount; j++) {
+				if (collision(bananas[i].getPosition(), bananas[i].getScaleFactor(), monkey[j].getPosition(), monkey[j].getScaleFactor())) {
+					monkey[j].updateHealth(bananas[i].getDamage());
+					if (!monkey[j].stillAlive()) {
+						monkey[j].initMonkey();
+					}
+					bananas[i].setVisibility(false);
+					break;
+				}
+			}
+
+			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, bulletModel.m);
+			glDrawArrays(GL_TRIANGLES, 0, g_point_count[4]);
+		}
 	}
 
     glutSwapBuffers();
@@ -717,7 +789,7 @@ void keypress(unsigned char key, int x, int y) {
 	float deltaTime = float(currentTime - last_time);
 	float xpos[4] = { 0.0, -1.5, 0, 1.5 };
 	float zpos[4] = { 1.5, 0.0, -1.5, 0.0 };
-
+	//printf("KEY %c\n", key);
 	switch (key) {
 		// Move forward
 		case 'w':
@@ -775,6 +847,7 @@ void keypress(unsigned char key, int x, int y) {
 		// Exit program
 		case 'x':
 			exit(0);
+			break;
 	}
 
 }
@@ -794,7 +867,8 @@ void updateMouse(int x, int y) {
 
 void handleMouse(int button, int state, int x, int y) {
 	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN)) {
-		bananas[bulletCount].initBullet();
+		bananas[bulletIndex].initBullet();
+		bulletIndex = (bulletIndex + 1) % max_bullets;
 		bulletCount++;
 	}
 }

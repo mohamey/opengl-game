@@ -1,2 +1,25 @@
-﻿  Lab 5.vcxproj -> U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\Lab 5.exe
+﻿  main.cpp
+main.cpp(58): warning C4305: 'initializing': truncation from 'double' to 'float'
+main.cpp(205): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(210): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(224): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(304): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(305): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(541): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(563): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(609): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(624): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(656): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(834): warning C4305: '-=': truncation from 'double' to 'float'
+main.cpp(844): warning C4305: '+=': truncation from 'double' to 'float'
+  Generating code
+  16 of 267 functions ( 6.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+soil.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(SOIL.obj)' or at 'U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\SOIL.pdb'; linking object as if no debug info
+soil.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_helper.obj)' or at 'U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\SOIL.pdb'; linking object as if no debug info
+soil.lib(stb_image_aug.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(stb_image_aug.obj)' or at 'U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\SOIL.pdb'; linking object as if no debug info
+soil.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_DXT.obj)' or at 'U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\SOIL.pdb'; linking object as if no debug info
+  Lab 5.vcxproj -> U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\Lab 5.exe
   Lab 5.vcxproj -> U:\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\Lab 5.pdb (Full PDB)
