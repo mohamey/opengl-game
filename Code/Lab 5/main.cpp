@@ -9,6 +9,7 @@
 #include <iostream>
 #include "maths_funcs.h"
 #include "text.h"
+#include <irrKlang.h>
 
 // Assimp includes
 
@@ -39,6 +40,11 @@ unsigned int vao[5];
 unsigned int vp_vbo[5];
 unsigned int vn_vbo[5];
 unsigned int vt_vbo[5];
+
+// Audio
+using namespace irrklang;
+ISoundEngine *SoundEngine = createIrrKlangDevice();
+DWORD audioInterval = -1;
 
 int text_id;
 int health_id;
@@ -107,6 +113,7 @@ class Bullet {
 		float rotation = 0.0;
 		vec3 scaleVector;
 		float damage = 1.0;
+		float damageScale;
 		bool visible;
 		bool bazooka;
 
@@ -136,19 +143,6 @@ class Bullet {
 				rotation = ((90.0 * abs(z)) + 270.0) * -1.0;
 			}
 			printf("Angle: %f\n", rotation);
-			/*if (dir.v[2] == -1.0) {
-				rotation = 90.0;
-			}
-			else if (dir.v[2] == 1.0) {
-				rotation = -90.0;
-			}
-			else if (dir.v[0] == -1.0) {
-				rotation = 180.0;
-			}
-			else {
-				rotation = 0.0;
-			}
-			rotation = 0.0;*/
 		}
 
 		void setVisible() {
@@ -162,9 +156,11 @@ class Bullet {
 		void setScale() {
 			if (bazooka) {
 				scaleFactor = 1.0f;
+				damageScale = 10.0f;
 			}
 			else {
-				scaleFactor = 0.33f;
+				scaleFactor = 0.1f;
+				damageScale = 0.1f;
 			}
 			scaleVector = vec3(scaleFactor, scaleFactor, scaleFactor);
 		}
@@ -218,6 +214,14 @@ class Bullet {
 
 		bool isBazooka() {
 			return bazooka;
+		}
+
+		float getDamageScale() {
+			return damageScale;
+		}
+
+		void setScaleFactor(float scale) {
+			scaleFactor = scale;
 		}
 };
 
@@ -602,6 +606,7 @@ void shoot() {
 	DWORD interval = curr_time - lastBullet;
 	if (minInterval < interval) {
 		bullets[bulletIndex].initBullet(false);
+		SoundEngine->play2D("../Audio/shot.wav", GL_FALSE);
 		bulletIndex = (bulletIndex + 1) % max_bullets;
 		bulletCount++;
 		lastBullet = curr_time;
@@ -690,6 +695,9 @@ void display(){
 		bananaModel = translate(bananaModel, banana[i].getPosition());
 
 		if (collision(position, 0.25, banana[i].getPosition(), banana[i].getScaleFactor())) {
+			if (audioInterval == -1) {
+				SoundEngine->play2D("../Audio/hit.wav", GL_FALSE);
+			}
 			banana[i].initBanana();
 			health -= bananaDamage;
 			if (health <= 0) {
@@ -714,6 +722,7 @@ void display(){
 		banana[bananaCount].initBanana();
 		bananaCount++;
 		lastBanana = timeGetTime();
+		SoundEngine->play2D("../Audio/cyborgBanana.wav", GL_FALSE);
 		//printf("ADDED Monkey %d! \n", monkeyCount);
 	}
 
@@ -732,17 +741,30 @@ void display(){
 			bullets[i].updatePosition();
 
 			// Check if banana collided with a monkey
+			bool init = true;
 			for (int j = 0; j < bananaCount; j++) {
 				if (collision(bullets[i].getPosition(), bullets[i].getScaleFactor(), banana[j].getPosition(), banana[j].getScaleFactor())) {
-					banana[j].updateHealth(bullets[i].getDamage());
-					if (!banana[j].stillAlive()) {
-						banana[j].initBanana();
-						score++;
+					if (init && bullets[i].isBazooka()) {
+						j = 0;
+						bullets[i].setScaleFactor(bullets[i].getDamageScale());
+						init = false;
 					}
-					bullets[i].setVisibility(false);
-					if (!bullets[i].isBazooka()) {
-						break;
+					else {
+						banana[j].updateHealth(bullets[i].getDamage());
+						if (!banana[j].stillAlive()) {
+							banana[j].initBanana();
+							score++;
+						}
+						bullets[i].setVisibility(false);
+						if (!bullets[i].isBazooka()) {
+							SoundEngine->play2D("../Audio/smallHit.wav", GL_FALSE);
+							break;
+						}
+						else {
+							SoundEngine->play2D("../Audio/bigHit.wav", GL_FALSE);
+						}
 					}
+					
 				}
 			}
 
@@ -752,6 +774,10 @@ void display(){
 	}
 
 	if (playerDead && finalScore == -1) {
+		SoundEngine->stopAllSounds();
+		audioInterval = timeGetTime();
+		SoundEngine->play2D("../Audio/gameOver.wav", GL_FALSE);
+
 		char tmp[256];
 		finalScore = score;
 		sprintf(tmp, "GAME OVER\nSCORE: %i\n", finalScore);
@@ -767,6 +793,11 @@ void display(){
 		char tmp2[256];
 		sprintf(tmp2, "Health: %i\n", health);
 		update_text(health_id, tmp2);
+	}
+
+	if (audioInterval != -1 && (timeGetTime() - audioInterval) > 3500) {
+		SoundEngine->play2D("../Audio/background.mp3", GL_TRUE);
+		audioInterval = -1;
 	}
 
 	draw_texts();
@@ -889,6 +920,10 @@ void init()
 	health_id = add_text("Health: 100", 0.6, -0.75, 60.0f, 0.0, 1.0, 0.0, 1.0);
 	gameOver_id = add_text("", -0.25, 0.25, 100.0f, 1.0, 0.0, 0.0, 1.0);
 	cursor_id = add_text("+", -0.005, 0.03, 30.0f, 0.0, 0.0, 0.0, 1.0);
+
+	//PlaySound("../Audio/cyborgBanana.wav", NULL, SND_ASYNC);
+
+	SoundEngine->play2D("../Audio/background.mp3", GL_TRUE);
 }
 
 // Placeholder code for the keypress
