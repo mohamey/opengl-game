@@ -43,6 +43,7 @@ unsigned int vt_vbo[5];
 int text_id;
 int health_id;
 int gameOver_id;
+int cursor_id;
 int score = 0;
 int health = 100;
 int bananaDamage = 15;
@@ -887,6 +888,7 @@ void init()
 	text_id = add_text("Score: 0", -0.9 , -0.75, 60.0f, 0.0, 0.0, 1.0, 1.0);
 	health_id = add_text("Health: 100", 0.6, -0.75, 60.0f, 0.0, 1.0, 0.0, 1.0);
 	gameOver_id = add_text("", -0.25, 0.25, 100.0f, 1.0, 0.0, 0.0, 1.0);
+	cursor_id = add_text("+", -0.005, 0.03, 30.0f, 0.0, 0.0, 0.0, 1.0);
 }
 
 // Placeholder code for the keypress

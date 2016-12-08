@@ -1,4 +1,25 @@
-﻿soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_buffer already defined in text.obj; second definition ignored
+﻿  main.cpp
+\\134.226.32.3\ugrad\mohamey\my documents\visual studio 2015\projects\opengl-game\code\lab 5\text.h(22): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+  \\134.226.32.3\ugrad\mohamey\my documents\visual studio 2015\projects\opengl-game\code\lab 5\text.h(22): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+main.cpp(70): warning C4305: 'initializing': truncation from 'double' to 'float'
+main.cpp(127): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(130): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(133): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(136): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(259): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(264): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(278): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(358): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(359): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(578): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+main.cpp(595): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(627): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(689): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(729): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(888): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(889): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(891): warning C4305: 'argument': truncation from 'double' to 'float'
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_buffer already defined in text.obj; second definition ignored
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_malloc already defined in text.obj; second definition ignored
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_buffer already defined in text.obj; second definition ignored
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_malloc already defined in text.obj; second definition ignored
@@ -20,9 +41,9 @@ soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_image_free already defined 
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_failure_reason already defined in text.obj; second definition ignored
 \\134.226.32.3\Ugrad\mohamey\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\Lab 5.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
   Generating code
-  19 of 303 functions ( 6.3%) were compiled, the rest were copied from previous compilation.
+  2 of 303 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    12 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 soil.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(SOIL.obj)' or at '\\134.226.32.3\Ugrad\mohamey\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\SOIL.pdb'; linking object as if no debug info
 soil.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_helper.obj)' or at '\\134.226.32.3\Ugrad\mohamey\My Documents\Visual Studio 2015\Projects\opengl-game\Code\Release\SOIL.pdb'; linking object as if no debug info
