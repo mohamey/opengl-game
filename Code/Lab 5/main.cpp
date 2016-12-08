@@ -118,7 +118,7 @@ class Bullet {
 		void updatePosition() {
 			vec3 dir = direction;
 			print(dir);
-			position += z_movement * speed;
+			position += dir * speed;
 			distance_travelled += movement_unit * speed;
 		}
 
@@ -593,6 +593,7 @@ void display(){
 
 	// Now draw the bullet objects
 	bindBuffers(4);
+	glBindTexture(GL_TEXTURE_2D, bulletTex);
 	for (int i = 0; i < bulletCount; i++) {
 		mat4 bulletModel = identity_mat4();
 		bulletModel = translate(bulletModel, bananas[i].getPosition());
@@ -633,7 +634,8 @@ void init()
 	generateObjectBufferMesh(2);
 	load_mesh(MONKEY_MESH, &g_vp[3], &g_vn[3], &g_vt[3], &g_point_count[3], false);
 	generateObjectBufferMesh(3);
-	load_mesh(BULLET_MESH, &g_vp[4], &g_vn[4], &g_vt[4], &g_point_count[4], false);
+	load_mesh(BULLET_MESH, &g_vp[4], &g_vn[4], &g_vt[4], &g_point_count[4], true);
+	generateObjectBufferMesh(4);
 	monkey[0].initMonkey();
 	monkey[1].initMonkey();
 	monkey[2].initMonkey();
@@ -701,7 +703,7 @@ void init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	wid = 0, hei = 0;
 	//glGenerateMipmap(GL_TEXTURE_2D);
-	image = SOIL_load_image("../Meshes/Banana.jpg", &wid, &hei, 0, SOIL_LOAD_RGBA);
+	image = SOIL_load_image("../Meshes/Banana.png", &wid, &hei, 0, SOIL_LOAD_RGBA);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wid, hei, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 
