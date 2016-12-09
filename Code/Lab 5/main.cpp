@@ -79,7 +79,7 @@ static DWORD  last_time = 0;
 float horizontalAngle = M_PI;
 float verticalAngle = 0.0f;
 float initialFoV = 90.0f;
-float speed = 0.03f;
+float speed = 0.05f;
 float mouseSpeed = 0.0007f;
 
 // Keep track of how far the mouse has deviated from the origin
@@ -623,6 +623,13 @@ void updatePos() {
 	if (downDown) {
 		position -= direction * speed;
 	}
+	if (leftDown) {
+		position -= rightVec * speed;
+	}
+	if (rightDown) {
+		position += rightVec * speed;
+	}
+
 }
 
 void display(){
@@ -960,11 +967,11 @@ void keypress(unsigned char key, int xpos, int y) {
 			downDown = true;
 			break;
 		case 'a':
-			xMov = 1.0 * direction.v[0];
-			zMov = 1.0 * direction.v[2];
-			position += vec3(xMov, 0.0, zMov) * speed;
+			leftDown = true;
 			break;
-
+		case 'd':
+			rightDown = true;
+			break;
 		case 'x':
 			exit(0);
 		}
@@ -982,6 +989,12 @@ void keyUp(unsigned char key, int xpos, int y) {
 			break;
 		case 's':
 			downDown = false;
+			break;
+		case 'a':
+			leftDown = false;
+			break;
+		case 'd':
+			rightDown = false;
 			break;
 	}
 }
