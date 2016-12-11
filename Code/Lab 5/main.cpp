@@ -57,6 +57,9 @@ bool leftButtonDown = false;
 bool playerDead = false;
 int finalScore = -1;
 
+// Key stuff
+bool upDown = false, downDown = false, leftDown = false, rightDown = false;
+
 // Macro for indexing vertex buffer
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -76,7 +79,7 @@ static DWORD  last_time = 0;
 float horizontalAngle = M_PI;
 float verticalAngle = 0.0f;
 float initialFoV = 90.0f;
-float speed = 0.11f;
+float speed = 0.05f;
 float mouseSpeed = 0.0007f;
 
 // Keep track of how far the mouse has deviated from the origin
@@ -613,6 +616,22 @@ void shoot() {
 	}
 }
 
+void updatePos() {
+	if (upDown) {
+		position += direction * speed;
+	}
+	if (downDown) {
+		position -= direction * speed;
+	}
+	if (leftDown) {
+		position -= rightVec * speed;
+	}
+	if (rightDown) {
+		position += rightVec * speed;
+	}
+
+}
+
 void display(){
 
 	// tell GL to only draw onto a pixel if the shape is closer to the viewer
@@ -621,6 +640,8 @@ void display(){
 	glClearColor (0.5f, 0.5f, 0.5f, 1.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram (shaderProgramID);
+
+	updatePos();
 
 	//Declare your uniform variables that will be used in your shader
 	int matrix_location = glGetUniformLocation(shaderProgramID, "model");
@@ -927,21 +948,29 @@ void init()
 }
 
 // Placeholder code for the keypress
-void keypress(unsigned char key, int x, int y) {
+void keypress(unsigned char key, int xpos, int y) {
 	double currentTime = timeGetTime();
 	float deltaTime = float(currentTime - last_time);
-	float xpos[4] = { 0.0, -1.5, 0, 1.5 };
-	float zpos[4] = { 1.5, 0.0, -1.5, 0.0 };
+	float x = direction.v[0];
+	float z = direction.v[2];
+	float xMov, zMov;
 	//printf("KEY %c\n", key);
 	if (!playerDead) {
 		switch (key) {
 			// Move forward
 		case 'w':
-			position += direction * speed;
+			printf("UP PRESSED\n");
+			upDown = true;
 			break;
 			// Move backwards
 		case 's':
-			position -= direction * speed;
+			downDown = true;
+			break;
+		case 'a':
+			leftDown = true;
+			break;
+		case 'd':
+			rightDown = true;
 			break;
 		case 'x':
 			exit(0);
@@ -951,6 +980,23 @@ void keypress(unsigned char key, int x, int y) {
 		exit(0);
 	}
 
+}
+
+void keyUp(unsigned char key, int xpos, int y) {
+	switch (key) {
+		case 'w':
+			upDown = false;
+			break;
+		case 's':
+			downDown = false;
+			break;
+		case 'a':
+			leftDown = false;
+			break;
+		case 'd':
+			rightDown = false;
+			break;
+	}
 }
 
 void updateMouse(int x, int y) {
@@ -993,6 +1039,7 @@ int main(int argc, char** argv){
 	glutDisplayFunc(display);
 	glutIdleFunc(updateScene);
 	glutKeyboardFunc(keypress);
+	glutKeyboardUpFunc(keyUp);
 	glutMouseFunc(handleMouse);
 	glutMotionFunc(updateMouse);
 	glutPassiveMotionFunc(updateMouse);
