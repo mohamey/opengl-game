@@ -10,6 +10,8 @@
 #include "maths_funcs.h"
 #include "text.h"
 #include <irrKlang.h>
+#include "bullet.h"
+#include "banana.h"
 
 // Assimp includes
 
@@ -101,132 +103,7 @@ GLuint planeTex, bananaTex, cityTex, bulletTex;
 // Track camera rotations with character
 int rotations = 0;
 
-// Define a class for the bullet
-class Bullet {
-	private:
-		vec3 pos;
-		vec3 dir;
-		float movement_unit = 1.0;
-		vec3 x_movement = vec3(movement_unit, 0.0, 0.0);
-		vec3 z_movement = vec3(0.0, 0.0, movement_unit);
-		float speed = 0.4f;
-		float distance_travelled = 0.0f;
-		float max_distance = 10.0f;
-		float scaleFactor;
-		float rotation = 0.0;
-		vec3 scaleVector;
-		float damage = 1.0;
-		float damageScale;
-		bool visible;
-		bool bazooka;
 
-		void setStartPoint() {
-			//print(bananaPosition);
-			pos = position + (direction);
-		}
-
-		void setDirection() {
-			dir = vec3(direction.v[0], direction.v[1], direction.v[2]);
-			//print(dir);
-		}
-
-		void setRotation() {
-			print(dir);
-			float x = dir.v[0], z = dir.v[2];
-			if ((x <= 0 && x >= -1) && (z <= 1 && z >= 0)) {
-				rotation = (90.0 * abs(x)) * -1.0;
-			}
-			else if ((x >= -1 && x <= 0) && (z <= 0 && z >= -1)) {
-				rotation = ((90.0 * abs(z)) + 90.0) * -1.0;
-			}
-			else if ((x <= 1 && x >= 0) && (z >= -1 && z <= 0)) {
-				rotation = ((90.0 * abs(x)) + 180.0) * -1.0;
-			}
-			else if ((x <= 1 && x >= 0) && (z >= 0 && z <= 1)) {
-				rotation = ((90.0 * abs(z)) + 270.0) * -1.0;
-			}
-			printf("Angle: %f\n", rotation);
-		}
-
-		void setVisible() {
-			visible = true;
-		}
-
-		void setBazooka(bool val) {
-			bazooka = val;
-		}
-
-		void setScale() {
-			if (bazooka) {
-				scaleFactor = 1.0f;
-				damageScale = 10.0f;
-			}
-			else {
-				scaleFactor = 0.1f;
-				damageScale = 0.1f;
-			}
-			scaleVector = vec3(scaleFactor, scaleFactor, scaleFactor);
-		}
-
-	public:
-		void initBullet(bool val) {
-			setStartPoint();
-			setVisible();
-			setDirection();
-			setRotation();
-			setBazooka(val);
-			setScale();
-		}
-
-		vec3 getPosition() {
-			return pos;
-		}
-
-		float getScaleFactor() {
-			return scaleFactor;
-		}
-
-		vec3 getScaleVector() {
-			return scaleVector;
-		}
-
-		void updatePosition() {
-			pos += dir * speed;
-			distance_travelled += movement_unit * speed;
-		}
-
-		bool inBounds() {
-			return distance_travelled < max_distance;
-		}
-
-		double getRotation() {
-			return rotation;
-		}
-
-		float getDamage() {
-			return damage;
-		}
-
-		void setVisibility(bool val) {
-			visible = val;
-		}
-
-		bool getVisibility() {
-			return visible;
-		}
-
-		bool isBazooka() {
-			return bazooka;
-		}
-
-		float getDamageScale() {
-			return damageScale;
-		}
-
-		void setScaleFactor(float scale) {
-			scaleFactor = scale;
-		}
-};
 
 DWORD lastBazooka = timeGetTime();
 DWORD bazookaInterval = 3000;
@@ -239,115 +116,7 @@ DWORD minInterval = 100;
 
 int bulletCount = 0, bulletIndex = 0;
 
-// Define a class for the Monkey heads
-class Banana {
-	private:
-		int index;
-		vec3 position;
-		double rotation;
-		float movement_unit = 1.0;
-		vec3 x_movement = vec3(movement_unit, 0.0, 0.0);
-		vec3 z_movement = vec3(0.0, 0.0, movement_unit);
-		float speed = 0.4f;
-		double distance_travelled = 0.0;
-		double max_distance = 40.0f;
-		float scaleFactor = 0.75f;
-		vec3 scaleVector = vec3(0.25, 0.25, 0.25);
-		float health = 1.0;
 
-		void generateIndex() {
-			index = rand() % 4;
-			//printf("INDEX %d\n", index);
-		}
-
-		void setStartPoint() {
-			vec3 positions[4] = { vec3(0.0, 0.5, -20.0), vec3(-20.0, 0.5, 0.0), vec3(0.0, 0.5, 20.0), vec3(20.0, 0.5, 0.0) };
-			if (index == 0 || index == 2) {
-				float randOffset = (float) (rand() % 3000) / 1500.0;
-				randOffset -= 1.0;
-				position = positions[index] + vec3(randOffset, 0.0, 0.0);
-			}
-			else {
-				float randOffset = (float)(rand() % 3000) / 1500.0;
-				randOffset -= 1.0;
-				position = positions[index] + vec3(0.0, 0.0, randOffset);
-			}
-		}
-
-		void setRotation() {
-			double rotations[4] = { 90.0, 180.0, 270.0, 0.0 };
-			rotation = rotations[index];
-		}
-
-		void setSpeed() {
-			int rando = rand() % 500 + 500;
-			//printf("RANDO: %i\n", rando);
-			speed = (float)rando / 10000.0;
-			//printf("SPEED: %f\n", speed);
-		}
-
-	public:
-		void initBanana() {
-			generateIndex();
-			setStartPoint();
-			setRotation();
-			setSpeed();
-			distance_travelled = 0.0f;
-		}
-
-		vec3 getPosition() {
-			return position;
-		}
-
-		double getRotation() {
-			return rotation;
-		}
-
-		void updatePosition() {
-			switch (index) {
-				case 0:
-					position = position + (z_movement * speed);
-					distance_travelled += (movement_unit * speed);
-					break;
-				case 1:
-					position = position + (x_movement * speed);
-					distance_travelled += (movement_unit * speed);
-					break;
-				case 2:
-					position = position - (z_movement * speed);
-					distance_travelled += (movement_unit * speed);
-					break;
-				case 3:
-					position = position - (x_movement * speed);
-					distance_travelled += (movement_unit * speed);
-					break;
-			}
-		}
-
-		bool inBounds() {
-			return distance_travelled < max_distance;
-		}
-
-		float getScaleFactor() {
-			return scaleFactor;
-		}
-
-		vec3 getScaleVector() {
-			return scaleVector;
-		}
-
-		float getHealth() {
-			return health;
-		}
-
-		void updateHealth(float damage) {
-			health -= damage;
-		}
-
-		bool stillAlive() {
-			return health > 0.0;
-		}
-};
 
 const int max_bananas = 30;
 Banana banana[max_bananas];
@@ -608,7 +377,7 @@ void shoot() {
 	DWORD curr_time = timeGetTime();
 	DWORD interval = curr_time - lastBullet;
 	if (minInterval < interval) {
-		bullets[bulletIndex].initBullet(false);
+		bullets[bulletIndex].initBullet(false, position, direction);
 		SoundEngine->play2D("../Audio/shot.wav", GL_FALSE);
 		bulletIndex = (bulletIndex + 1) % max_bullets;
 		bulletCount++;
@@ -1020,7 +789,7 @@ void handleMouse(int button, int state, int x, int y) {
 		DWORD newTime = timeGetTime();
 		DWORD timeDiff = newTime - lastBazooka;
 		if (bazookaInterval < timeDiff) {
-			bullets[bulletIndex].initBullet(true);
+			bullets[bulletIndex].initBullet(true, position, direction);
 			bulletIndex = (bulletIndex + 1) % max_bullets;
 			bulletCount++;
 			lastBazooka = newTime;

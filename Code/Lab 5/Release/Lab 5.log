@@ -1,2 +1,51 @@
-﻿  Lab 5.vcxproj -> D:\game-project\Code\Release\Lab 5.exe
+﻿  main.cpp
+d:\game-project\code\lab 5\text.h(22): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+  d:\game-project\code\lab 5\text.h(22): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+d:\game-project\code\lab 5\bullet.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\game-project\code\lab 5\bullet.h(36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\game-project\code\lab 5\bullet.h(39): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\game-project\code\lab 5\bullet.h(42): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\game-project\code\lab 5\banana.h(30): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\game-project\code\lab 5\banana.h(35): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\game-project\code\lab 5\banana.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(81): warning C4305: 'initializing': truncation from 'double' to 'float'
+main.cpp(134): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(135): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.cpp(354): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+main.cpp(371): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(422): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(484): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(528): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(709): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(710): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(712): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(725): warning C4101: 'xMov': unreferenced local variable
+main.cpp(725): warning C4101: 'zMov': unreferenced local variable
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_buffer already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_malloc already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_buffer already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_malloc already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_malloc_guesssize already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_ldr_to_hdr_scale already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_ldr_to_hdr_gamma already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_hdr_to_ldr_scale already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_hdr_to_ldr_gamma already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_is_hdr_from_file already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_is_hdr already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_is_hdr_from_memory already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_loadf_from_memory already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_loadf_from_file already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_loadf already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_load_from_memory already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_load_from_file already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_load already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_image_free already defined in text.obj; second definition ignored
+soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_failure_reason already defined in text.obj; second definition ignored
+D:\game-project\Code\Release\Lab 5.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
+  Generating code
+  14 of 308 functions ( 4.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Lab 5.vcxproj -> D:\game-project\Code\Release\Lab 5.exe
   Lab 5.vcxproj -> D:\game-project\Code\Release\Lab 5.pdb (Full PDB)

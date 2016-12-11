@@ -126,6 +126,8 @@
     <ClCompile Include="text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="banana.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="maths_funcs.h" />
     <ClInclude Include="soil\include\SOIL.h" />
     <ClInclude Include="stb_image.h" />
