@@ -35,32 +35,8 @@
 #define BULLET_MESH "../Meshes/banana.obj"
 /*----------------------------------------------------------------------------
   ----------------------------------------------------------------------------*/
-// Mesh Variables
-std::vector<float> g_vp[5], g_vn[5], g_vt[5];
-int g_point_count[5];
-unsigned int vao[5];
-unsigned int vp_vbo[5];
-unsigned int vn_vbo[5];
-unsigned int vt_vbo[5];
 
-// Audio
-using namespace irrklang;
-ISoundEngine *SoundEngine = createIrrKlangDevice();
-DWORD audioInterval = -1;
-
-int text_id;
-int health_id;
-int gameOver_id;
-int cursor_id;
-int score = 0;
-int health = 100;
-int bananaDamage = 15;
-bool leftButtonDown = false;
-bool playerDead = false;
-int finalScore = -1;
-
-// Key stuff
-bool upDown = false, downDown = false, leftDown = false, rightDown = false;
+// Handy Definitions
 
 // Macro for indexing vertex buffer
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -68,63 +44,87 @@ bool upDown = false, downDown = false, leftDown = false, rightDown = false;
 #define M_PI 3.1415926535897932384626433832795
 
 using namespace std;
+
+// Shader/Buffer/Texture Variables
 GLuint shaderProgramID;
-
-int width = 1920;
-int height = 1080;
-
 GLuint loc1, loc2, loc3;
-
-static DWORD  last_time = 0;
-
-// Mouse field of view variables
-float horizontalAngle = M_PI;
-float verticalAngle = 0.0f;
-float initialFoV = 90.0f;
-float speed = 0.05f;
-float mouseSpeed = 0.0007f;
-
-// Keep track of how far the mouse has deviated from the origin
-int totalX = 0, totalY = 0;
-
-vec3 direction = vec3(0.0, 1.0, 1.0), rightVec, up, position = vec3(0.0, 1.0, 0.0f);
-vec3 newPosVector = vec3(0, 1.5, 1.5);
-bool z_axis;
-
-// Banana man variables
-mat4 bananamanModel;
-vec3 bananaPosition = vec3(0.0, 0.0, 0.0);
-double bananaDirection = -90.0;
-float bananaScale = 0.25;
-
 GLuint planeTex, bananaTex, cityTex, bulletTex;
 
+// Mesh Variables for loading in meshes
+std::vector<float> g_vp[4], g_vn[4], g_vt[4];
+int g_point_count[4];
+unsigned int vao[4];
+unsigned int vp_vbo[4];
+unsigned int vn_vbo[4];
+unsigned int vt_vbo[4];
 
-// Track camera rotations with character
-int rotations = 0;
+// Audio Variables
+using namespace irrklang;
+ISoundEngine *SoundEngine = createIrrKlangDevice();
+DWORD audioInterval = -1;
 
+// Text Display Variables
+int text_id;
+int health_id;
+int gameOver_id;
+int cursor_id;
+int score = 0;
+int health = 100;
+int finalScore = -1;
 
+// Player Variables
+bool playerDead = false;
+float speed = 0.05f;
+vec3 position = vec3(0.0, 1.0, 0.0);
 
+// Player Input Variables
+bool leftButtonDown = false;
+bool upDown = false;
+bool downDown = false;
+bool leftDown = false;
+bool rightDown = false;
+
+// Camera Variables
+vec3 direction = vec3(0.0, 1.0, 1.0);
+vec3 rightVec;
+vec3 up;
+float horizontalAngle = M_PI;
+float initialFoV = 100.0f;
+float mouseSpeed = 0.0007f;
+int totalX = 0; // Track mouse movement on x axis
+int totalY = 0; // Track mouse movement on y axis
+
+// Display Variables
+int width = 1920;
+int height = 1080;
+static DWORD  last_time = 0; // Used to control frame rate
+
+/// Weapon variables
+// Track bazooka firing rate
 DWORD lastBazooka = timeGetTime();
 DWORD bazookaInterval = 3000;
-
+// Declare bullets array
 const int max_bullets = 30;
 Bullet bullets[max_bullets];
-
+// Set firing rate for normal bullets
 DWORD lastBullet = timeGetTime();
 DWORD minInterval = 100;
-
+// Keep track of bullets
 int bulletCount = 0, bulletIndex = 0;
 
-
-
+/// BananaMan Variables
+// Declare bananaman array
 const int max_bananas = 30;
 Banana banana[max_bananas];
+// Keep track of bananas in world
 int bananaCount = 0;
+// Set rate for making new bananaman
 DWORD lastBanana;
 DWORD bananaInterval = 5000;
 
 
+// A function that checks for collision between two objects
+// Only checks for collision on the x and z axes
 bool collision(vec3 objectPos1, double objScale1, vec3 objectPos2, double objScale2) {
 	float x1 = objectPos1.v[0];
 	float x2 = objectPos2.v[0];
@@ -352,16 +352,14 @@ void generateObjectBufferMesh(int index) {
 // Function for updating camera angles and direction
 void getInputData() {
 	horizontalAngle += mouseSpeed *  float(totalX) * -1.0;
-	//verticalAngle += mouseSpeed * float(totalY) * -1.0;
-	//horizontalAngle = M_PI;
-	//verticalAngle = -0.5;
 	totalX = 0, totalY = 0;
 
 	// Calculate vector for camera direction and other vectors
+	// Only horizontal movement is allowed
 	direction = vec3(
-		cos(verticalAngle) * sin(horizontalAngle),
-		sin(verticalAngle),
-		cos(verticalAngle) * cos(horizontalAngle)
+		cos(0.0) * sin(horizontalAngle),
+		sin(0.0),
+		cos(0.0) * cos(horizontalAngle)
 	);
 
 	rightVec = vec3(
@@ -373,6 +371,7 @@ void getInputData() {
 	up = cross(rightVec, direction);
 }
 
+// Create a new bullet once every bullet interval
 void shoot() {
 	DWORD curr_time = timeGetTime();
 	DWORD interval = curr_time - lastBullet;
@@ -385,6 +384,7 @@ void shoot() {
 	}
 }
 
+// Update the players position while any of WASD buttons are in the 'down' state
 void updatePos() {
 	if (upDown) {
 		position += direction * speed;
@@ -398,7 +398,6 @@ void updatePos() {
 	if (rightDown) {
 		position += rightVec * speed;
 	}
-
 }
 
 void display(){
@@ -410,24 +409,24 @@ void display(){
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram (shaderProgramID);
 
-	updatePos();
+	// Update the cameras position
+	if (!playerDead) {
+		updatePos();
+	}
 
 	//Declare your uniform variables that will be used in your shader
 	int matrix_location = glGetUniformLocation(shaderProgramID, "model");
 	int view_mat_location = glGetUniformLocation(shaderProgramID, "view");
 	int proj_mat_location = glGetUniformLocation(shaderProgramID, "proj");
 
-	// Root of the Hierarchy
+	// Root of the Hierarchy -> City
 	mat4 view = identity_mat4();
 	mat4 persp_proj = perspective(initialFoV, (float)width / (float)height, 0.1, 100.0);
 	mat4 model = identity_mat4();
-	//model = rotate_x_deg(model, -90.0);
 	model = scale(model, vec3(2.0, 2.0, 2.0));
+
 	// Get mouse data to update camera position
 	getInputData();
-	vec3 newPosition = position + newPosVector;
-	vec3 newDirection = direction + vec3(0.0, -0.5, 0.0);
-	//view = look_at(newPosition, newPosition + newDirection, up);
 	view = look_at(position, position + direction, up);
 
 	// Bind buffer for city mesh
@@ -441,12 +440,9 @@ void display(){
 
 	glDrawArrays (GL_TRIANGLES, 0, g_point_count[0]);
 
-	// Plane stuff
+	// Bind the planes buffers and textures
 	bindBuffers(1);
-
-	// Bind texture buffers
 	glBindTexture(GL_TEXTURE_2D, planeTex);
-
 
 	// Hierarchical placement of plane above the city
 	mat4 plane = identity_mat4();
@@ -457,55 +453,47 @@ void display(){
 	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, plane_location.m);
 	glDrawArrays(GL_TRIANGLES, 0, g_point_count[1]);
 
-	// Banana man stuff
-	//bindBuffers(2);
-	//glBindTexture(GL_TEXTURE_2D, bananaTex);
-
-	// Create the objects model, scale it and orient it properly at the origin
-	//bananamanModel = identity_mat4();
-	//bananamanModel = scale(bananamanModel, vec3(bananaScale, bananaScale, bananaScale));
-	//bananamanModel = rotate_x_deg(bananamanModel, -90.0);
-	//bananamanModel = rotate_y_deg(bananamanModel, bananaDirection);
-
-	// Translate it in front of the camera
-	//bananaPosition= position + vec3(0.0, -0.5, 0.0);
-	//bananamanModel = translate(bananamanModel, bananaPosition);
-
-
-	//glUniformMatrix4fv(matrix_location, 1, GL_FALSE, bananamanModel.m);
-	//glDrawArrays(GL_TRIANGLES, 0, g_point_count[2]);
-
-	// Draw in the monkey
+	// Draw in the enemy bananas
+	// Bind bananamans buffers and texture
 	bindBuffers(2);
 	glBindTexture(GL_TEXTURE_2D, bananaTex);
+
+	// Iterate through bananas
 	for (int i = 0; i < bananaCount; i++) {
 		mat4 bananaModel = identity_mat4();
 		bananaModel = scale(bananaModel, banana[i].getScaleVector());
 		bananaModel = rotate_y_deg(bananaModel, banana[i].getRotation());
 		bananaModel = translate(bananaModel, banana[i].getPosition());
 
+		// Check if a collision between a bananaman and the player has occurred
 		if (collision(position, 0.25, banana[i].getPosition(), banana[i].getScaleFactor())) {
-			if (audioInterval == -1) {
+			if (!playerDead) {
 				SoundEngine->play2D("../Audio/hit.wav", GL_FALSE);
 			}
+			// Reset the banana and let the player take damage
 			banana[i].initBanana();
-			health -= bananaDamage;
+			health -= banana[i].getDamage();
+
+			// If players health drops below 0, set bool flag
 			if (health <= 0) {
 				playerDead = true;
 			}
 		}
+		else {
+			// If no collision, update the bananas position and check its still in bounds
+			banana[i].updatePosition();
 
-		banana[i].updatePosition();
-
-		if (!banana[i].inBounds()) {
-			score++;
-			banana[i].initBanana();
+			if (!banana[i].inBounds()) {
+				score++;
+				banana[i].initBanana();
+			}
 		}
-
+		// Draw this banananaman
 		glUniformMatrix4fv(matrix_location, 1, GL_FALSE, bananaModel.m);
 		glDrawArrays(GL_TRIANGLES, 0, g_point_count[2]);
 	}
 
+	// Spawn a new banana every interval
 	DWORD curr_time = timeGetTime();
 
 	if ((curr_time - lastBanana) > bananaInterval && bananaCount < max_bananas) {
@@ -513,16 +501,18 @@ void display(){
 		bananaCount++;
 		lastBanana = timeGetTime();
 		SoundEngine->play2D("../Audio/cyborgBanana.wav", GL_FALSE);
-		//printf("ADDED Monkey %d! \n", monkeyCount);
 	}
 
+	// If the left mouse button is down, generate new monkeys
 	if (leftButtonDown && !playerDead) {
 		shoot();
 	}
 
-	// Now draw the bullet objects
+	// Now draw the bullet objects (monkeys)
 	bindBuffers(3);
+	// Iterate through the number of bullets on field
 	for (int i = 0; i < min(bulletCount, max_bullets); i++) {
+		// Make sure the bullet is visible (hasnt hit an enemy)
 		if (bullets[i].getVisibility()) {
 			mat4 bulletModel = identity_mat4();
 			bulletModel = rotate_y_deg(bulletModel, bullets[i].getRotation());
@@ -532,26 +522,35 @@ void display(){
 
 			// Check if banana collided with a monkey
 			bool init = true;
+			// Iterate through bananas present in the game
 			for (int j = 0; j < bananaCount; j++) {
+				// Check for collision between current bullet and banana
 				if (collision(bullets[i].getPosition(), bullets[i].getScaleFactor(), banana[j].getPosition(), banana[j].getScaleFactor())) {
+					// If this is the first collision and the monkey is a bazooka
+					// Reset the loop and increase the bazookas collision radius. 
+					// This gives the impression of the missile being small, and the
+					// explosion being big
 					if (init && bullets[i].isBazooka()) {
 						j = 0;
 						bullets[i].setScaleFactor(bullets[i].getDamageScale());
 						init = false;
 					}
 					else {
+						// Update bananamans health with damage done, respawn if dead
 						banana[j].updateHealth(bullets[i].getDamage());
 						if (!banana[j].stillAlive()) {
 							banana[j].initBanana();
 							score++;
 						}
 						bullets[i].setVisibility(false);
-						if (!bullets[i].isBazooka()) {
-							SoundEngine->play2D("../Audio/smallHit.wav", GL_FALSE);
-							break;
+
+						// Play the appropriate sound for the collision
+						if (bullets[i].isBazooka()) {
+							SoundEngine->play2D("../Audio/bigHit.wav", GL_FALSE);
 						}
 						else {
-							SoundEngine->play2D("../Audio/bigHit.wav", GL_FALSE);
+							SoundEngine->play2D("../Audio/smallHit.wav", GL_FALSE);
+							break;
 						}
 					}
 					
@@ -563,11 +562,14 @@ void display(){
 		}
 	}
 
+	// If this is the first frame the player's dead
 	if (playerDead && finalScore == -1) {
+		// Stop sounds, play game over, restart music later
 		SoundEngine->stopAllSounds();
 		audioInterval = timeGetTime();
 		SoundEngine->play2D("../Audio/gameOver.wav", GL_FALSE);
 
+		// Show final score
 		char tmp[256];
 		finalScore = score;
 		sprintf(tmp, "GAME OVER\nSCORE: %i\n", finalScore);
@@ -576,6 +578,7 @@ void display(){
 		update_text(health_id, "Health: 0\n");
 	}
 	else if (!playerDead) {
+		// If players still alive, update scores
 		char tmp[256];
 		sprintf(tmp, "Score: %i\n", score);
 		update_text(text_id, tmp);
@@ -585,11 +588,13 @@ void display(){
 		update_text(health_id, tmp2);
 	}
 
+	// If the specified time has passed since starting the 'game over' sound clip, resume music
 	if (audioInterval != -1 && (timeGetTime() - audioInterval) > 3500) {
 		SoundEngine->play2D("../Audio/background.mp3", GL_TRUE);
 		audioInterval = -1;
 	}
 
+	// Draw text on display
 	draw_texts();
 
     glutSwapBuffers();
@@ -625,15 +630,15 @@ void init()
 	generateObjectBufferMesh(2);
 	load_mesh(MONKEY_MESH, &g_vp[3], &g_vn[3], &g_vt[3], &g_point_count[3], false);
 	generateObjectBufferMesh(3);
-	load_mesh(BULLET_MESH, &g_vp[4], &g_vn[4], &g_vt[4], &g_point_count[4], true);
-	generateObjectBufferMesh(4);
+
+	// Initialise three bananamen for the start
 	banana[0].initBanana();
 	banana[1].initBanana();
 	banana[2].initBanana();
 	bananaCount = 3;
 	lastBanana = timeGetTime();
 
-	// Get the plane texture
+	// Load the planes texture and save it for later use
 	glGenTextures(1, &planeTex);
 	glBindTexture(GL_TEXTURE_2D, planeTex);
 
@@ -641,7 +646,6 @@ void init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glGenerateMipmap(GL_TEXTURE_2D);
 	int wid, hei;
 	unsigned char* image = SOIL_load_image("../Meshes/plane.JPG", &wid, &hei, 0, SOIL_LOAD_RGBA);
 
@@ -650,7 +654,7 @@ void init()
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	// Get bananaman texture
+	// Load the bananamans texture and save it for later use
 	glGenTextures(1, &bananaTex);
 	glBindTexture(GL_TEXTURE_2D, bananaTex);
 
@@ -659,7 +663,6 @@ void init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	wid = 0, hei = 0;
-	//glGenerateMipmap(GL_TEXTURE_2D);
 	image = SOIL_load_image("../Meshes/bananaTex.png", &wid, &hei, 0, SOIL_LOAD_RGBA);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wid, hei, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
@@ -667,7 +670,7 @@ void init()
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	// Get city texture
+	// Load the city's texture and save it for later use
 	glGenTextures(1, &cityTex);
 	glBindTexture(GL_TEXTURE_2D, cityTex);
 
@@ -676,7 +679,6 @@ void init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	wid = 0, hei = 0;
-	//glGenerateMipmap(GL_TEXTURE_2D);
 	image = SOIL_load_image("../Meshes/cityscaper.png", &wid, &hei, 0, SOIL_LOAD_RGBA);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wid, hei, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
@@ -684,23 +686,7 @@ void init()
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	// Get city texture
-	glGenTextures(1, &bulletTex);
-	glBindTexture(GL_TEXTURE_2D, bulletTex);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	wid = 0, hei = 0;
-	//glGenerateMipmap(GL_TEXTURE_2D);
-	image = SOIL_load_image("../Meshes/Banana.png", &wid, &hei, 0, SOIL_LOAD_RGBA);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wid, hei, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-
-	SOIL_free_image_data(image);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
+	// Start text renderer
 	init_text_rendering("../Lab 5/freemono.png", "../Lab 5/freemono.meta", width, height);
 	// x and y are -1 to 1
 	// size_px is the maximum glyph size in pixels (try 100.0f)
@@ -711,33 +697,27 @@ void init()
 	gameOver_id = add_text("", -0.25, 0.25, 100.0f, 1.0, 0.0, 0.0, 1.0);
 	cursor_id = add_text("+", -0.005, 0.03, 30.0f, 0.0, 0.0, 0.0, 1.0);
 
-	//PlaySound("../Audio/cyborgBanana.wav", NULL, SND_ASYNC);
-
+	// Start playing the games background music
 	SoundEngine->play2D("../Audio/background.mp3", GL_TRUE);
 }
 
-// Placeholder code for the keypress
+// When player isnt dead, change boolean flag for key states on keypress
 void keypress(unsigned char key, int xpos, int y) {
-	double currentTime = timeGetTime();
-	float deltaTime = float(currentTime - last_time);
-	float x = direction.v[0];
-	float z = direction.v[2];
-	float xMov, zMov;
-	//printf("KEY %c\n", key);
 	if (!playerDead) {
 		switch (key) {
 			// Move forward
 		case 'w':
-			printf("UP PRESSED\n");
 			upDown = true;
 			break;
 			// Move backwards
 		case 's':
 			downDown = true;
 			break;
+			// Move Left
 		case 'a':
 			leftDown = true;
 			break;
+			// Move Right
 		case 'd':
 			rightDown = true;
 			break;
@@ -748,9 +728,9 @@ void keypress(unsigned char key, int xpos, int y) {
 	else if (key == 'x') {
 		exit(0);
 	}
-
 }
 
+// Change boolean flag for key state when key is unpressed
 void keyUp(unsigned char key, int xpos, int y) {
 	switch (key) {
 		case 'w':
@@ -768,6 +748,7 @@ void keyUp(unsigned char key, int xpos, int y) {
 	}
 }
 
+// Passively update the mouse's position
 void updateMouse(int x, int y) {
 	// Keep a tally of how far mouse has moved from origin
 	totalX += x - (width / 2);
@@ -781,10 +762,13 @@ void updateMouse(int x, int y) {
 	}
 }
 
+// Handle mouse clicks
 void handleMouse(int button, int state, int x, int y) {
+	// Allow left mouse button to be held down by using states
 	if ((button == GLUT_LEFT_BUTTON)) {
 		leftButtonDown = (state == GLUT_DOWN);
 	}
+	// Fire bazooka when right mouse button clicked
 	else if ((button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN) && !playerDead) {
 		DWORD newTime = timeGetTime();
 		DWORD timeDiff = newTime - lastBazooka;
@@ -807,6 +791,8 @@ int main(int argc, char** argv){
 	// Tell glut where the display function is
 	glutDisplayFunc(display);
 	glutIdleFunc(updateScene);
+
+	// Handle device peripherals
 	glutKeyboardFunc(keypress);
 	glutKeyboardUpFunc(keyUp);
 	glutMouseFunc(handleMouse);
@@ -815,6 +801,9 @@ int main(int argc, char** argv){
 	glutSetCursor(GLUT_CURSOR_NONE);
 	// Set mouse in the beginning of the screen
 	glutWarpPointer(width / 2, height / 2);
+
+	// Make the window fullscreen
+	glutFullScreen();
 
 	 // A call to glewInit() must be done after glut is initialized!
     GLenum res = glewInit();

@@ -18,6 +18,7 @@ private:
 	float scaleFactor = 0.75f;
 	vec3 scaleVector = vec3(0.25, 0.25, 0.25);
 	float health = 1.0;
+	int damage = 15;
 
 	void generateIndex() {
 		index = rand() % 4;
@@ -110,5 +111,9 @@ public:
 
 	bool stillAlive() {
 		return health > 0.0;
+	}
+
+	int getDamage() {
+		return damage;
 	}
 };

@@ -5,22 +5,21 @@ d:\game-project\code\lab 5\bullet.h(33): warning C4244: '=': conversion from 'do
 d:\game-project\code\lab 5\bullet.h(36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 d:\game-project\code\lab 5\bullet.h(39): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 d:\game-project\code\lab 5\bullet.h(42): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\game-project\code\lab 5\banana.h(30): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\game-project\code\lab 5\banana.h(35): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\game-project\code\lab 5\banana.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-main.cpp(81): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\game-project\code\lab 5\banana.h(31): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\game-project\code\lab 5\banana.h(36): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\game-project\code\lab 5\banana.h(50): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+main.cpp(91): warning C4305: 'initializing': truncation from 'double' to 'float'
 main.cpp(134): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 main.cpp(135): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 main.cpp(354): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-main.cpp(371): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-main.cpp(422): warning C4305: 'argument': truncation from 'double' to 'float'
-main.cpp(484): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-main.cpp(528): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-main.cpp(709): warning C4305: 'argument': truncation from 'double' to 'float'
-main.cpp(710): warning C4305: 'argument': truncation from 'double' to 'float'
-main.cpp(712): warning C4305: 'argument': truncation from 'double' to 'float'
-main.cpp(725): warning C4101: 'xMov': unreferenced local variable
-main.cpp(725): warning C4101: 'zMov': unreferenced local variable
+main.cpp(363): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(369): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(424): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(465): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(518): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(695): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(696): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(698): warning C4305: 'argument': truncation from 'double' to 'float'
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_buffer already defined in text.obj; second definition ignored
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_malloc already defined in text.obj; second definition ignored
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_buffer already defined in text.obj; second definition ignored
@@ -43,9 +42,9 @@ soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_image_free already defined 
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_failure_reason already defined in text.obj; second definition ignored
 D:\game-project\Code\Release\Lab 5.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
   Generating code
-  14 of 308 functions ( 4.5%) were compiled, the rest were copied from previous compilation.
+  1 of 305 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Lab 5.vcxproj -> D:\game-project\Code\Release\Lab 5.exe
   Lab 5.vcxproj -> D:\game-project\Code\Release\Lab 5.pdb (Full PDB)
