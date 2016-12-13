@@ -42,7 +42,7 @@ soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_image_free already defined 
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_failure_reason already defined in text.obj; second definition ignored
 D:\game-project\Code\Release\Lab 5.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
   Generating code
-  1 of 305 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+  18 of 305 functions ( 5.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
