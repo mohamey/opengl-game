@@ -7,7 +7,7 @@
 * Monkey
 
 ### City
-![images/city.png](City Model)
+![City Model](images/city.png)
 
 * File: baseCity.obj
 * Root of Hierarchy
@@ -15,7 +15,7 @@
 This is the main playing area of the game. The roads and buildings together were developed as a single mesh object, so as a result collision detection does not actually work between the player and the buildings of the city since the player technically has to walk through on the city's mesh via the roads.
 
 ### Plane
-![images/plane.png](Plane Model)
+![Plane Model](images/plane.png)
 
 * File: plane2.obj
 * Child of Hierarchy
@@ -23,6 +23,7 @@ This is the main playing area of the game. The roads and buildings together were
 The plane is placed above the city, and it was originally intended to have the plane flying above the city and have it capable of doing bomb runs on the city. I didn't get a chance to implement this feature, so I just kept the plane hovering above the city in my game.
 
 ### Bananaman
+![Bananaman Model](images/bananaman.png)
 
 * File: banananaman4.obj
 * Child of Hierarchy
@@ -30,6 +31,7 @@ The plane is placed above the city, and it was originally intended to have the p
 The bananamen represent enemies in the game and spawn randomly on one of the four edges of the city and travel straight through the city to the other side. A new bananaman is spawned every 5 seconds, each has a random speed, and each has its own hitbox to detect collisions. The texture for the bananaman was created by me and is found in the `bananaTex.png` file. The game stops spawning new bananamen when there is a total of 50 active bananamen in the game.
 
 ### Bullet
+![Bullet Model](images/monkeyhead.png)
 
 * File: Monkeyhead.dae
 * Spawns from player position
@@ -44,6 +46,9 @@ The user can move using the WASD keys, and can control the camera using the mous
 
 ### Scoring & Losing
 Scoring in the game is measured by counting the number of bananamen dodged or killed. A dodged bananaman is a bananaman that reaches the end of the road without colliding with a player so it respawns. Since the aim of the game is to survive for as long as possible, the player loses when he takes enough damage from bananamen that he runs out of health.
+
+### Hierarchical Creature
+The bananamen are created such that they are children of the city object which acts as the root in the hierarchy. As such, bananamen move relative to the city.
 
 ### Phong lighting
 Phong illumination was implemented in the vertex shader with one light source placed in (0.0, 10.0, 0.0). Ambient, specular and diffuse lighting were implemented.
@@ -63,11 +68,12 @@ Collision detection is implemented in the game between the user and bananaman ob
 The suggested text library is used to display player details including health, score, and final score when the game is over.
 
 ### Sound Effects
-Using the irrklang library, the game has background music and appropriate sound effects that play during gameplay. These sound effects are:
+Using the `Irrklang` library, the game has background music and appropriate sound effects that play during gameplay. These sound effects are:
 
-* Game Over
-* Fire Bullet
-* Bazooka Explosion
-* Player Taking Damage
-* Cyborg banana voice when bananaman spawns
-
+* Background music - `background.mp3`
+* Game Over - `gameOver.wav`
+* Fire Bullet - `shot.wav`
+* Bazooka Explosion - `bigHit.wav`
+* Player Taking Damage - `hit.wav`
+* Bananaman taking damage - `smallHit.wav`
+* Cyborg banana voice when bananaman spawns `cyborgBanana.wav`

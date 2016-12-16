@@ -17,9 +17,9 @@ main.cpp(369): warning C4244: 'argument': conversion from 'double' to 'float', p
 main.cpp(424): warning C4305: 'argument': truncation from 'double' to 'float'
 main.cpp(465): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 main.cpp(518): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+main.cpp(692): warning C4305: 'argument': truncation from 'double' to 'float'
+main.cpp(693): warning C4305: 'argument': truncation from 'double' to 'float'
 main.cpp(695): warning C4305: 'argument': truncation from 'double' to 'float'
-main.cpp(696): warning C4305: 'argument': truncation from 'double' to 'float'
-main.cpp(698): warning C4305: 'argument': truncation from 'double' to 'float'
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_buffer already defined in text.obj; second definition ignored
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_noheader_malloc already defined in text.obj; second definition ignored
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_zlib_decode_buffer already defined in text.obj; second definition ignored
@@ -42,9 +42,9 @@ soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_image_free already defined 
 soil.lib(stb_image_aug.obj) : warning LNK4006: _stbi_failure_reason already defined in text.obj; second definition ignored
 D:\game-project\Code\Release\Lab 5.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
   Generating code
-  18 of 305 functions ( 5.9%) were compiled, the rest were copied from previous compilation.
+  3 of 305 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Lab 5.vcxproj -> D:\game-project\Code\Release\Lab 5.exe
   Lab 5.vcxproj -> D:\game-project\Code\Release\Lab 5.pdb (Full PDB)
