@@ -432,8 +432,8 @@ void display(){
 	// Bind buffer for city mesh
 	bindBuffers(0);
 	glBindTexture(GL_TEXTURE_2D, cityTex);
-	
 	// update uniforms & draw
+
 	glUniformMatrix4fv (proj_mat_location, 1, GL_FALSE, persp_proj.m);
 	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view.m);
 	glUniformMatrix4fv (matrix_location, 1, GL_FALSE, model.m);
@@ -553,7 +553,6 @@ void display(){
 							break;
 						}
 					}
-					
 				}
 			}
 
@@ -597,12 +596,10 @@ void display(){
 	// Draw text on display
 	draw_texts();
 
-    glutSwapBuffers();
+  glutSwapBuffers();
 }
 
-
-
-void updateScene() {	
+void updateScene() {
 
 	// Placeholder code, if you want to work with framerate
 	// Wait until at least 16ms passed since start of last frame (Effectively caps framerate at ~60fps)
